@@ -1,6 +1,5 @@
 FROM gliderlabs/alpine:3.2
 
-RUN apt-get -y install python3-yaml
 RUN apk add --update perl gcc g++ make automake libtool autoconf m4 gcc-multilib && rm -rf /var/cache/apk/*
 
 RUN mkdir /pocketmine
