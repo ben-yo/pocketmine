@@ -1,9 +1,10 @@
-FROM bartt/ubuntu-base
+FROM gliderlabs/alpine:3.2
 
 RUN apt-get -y install python3-yaml
+RUN apk add --update perl gcc g++ make automake libtool autoconf m4 gcc-multilib && rm -rf /var/cache/apk/*
 
 RUN mkdir /pocketmine
-RUN cd /pocketmine && curl -sL http://get.pocketmine.net/ | bash -s - -r -v development
+RUN cd /pocketmine && wget -q -O - http://get.pocketmine.net/ | bash -s - -v development
 
 VOLUME /pocketmine
 WORKDIR /pocketmine
