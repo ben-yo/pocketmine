@@ -1,20 +1,14 @@
-FROM phusion/baseimage:0.9.16
+FROM bartt/ubuntu-base
 
-ENV HOME /root
+RUN apt-get -y install python3-yaml
 
-RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
+RUN mkdir /pocketmine
+RUN cd /pocketmine && curl -sL https://raw.githubusercontent.com/PocketMine/php-build-scripts/master/installer.sh | bash -s - -v development
 
-CMD ["/sbin/my_init"]
+VOLUME /pocketmine
+WORKDIR /pocketmine
 
-RUN mkdir /var/lib/pocketmine
-RUN cd /var/lib/pocketmine && curl -sL https://raw.githubusercontent.com/PocketMine/php-build-scripts/master/installer.sh | bash -s - -v development
+EXPOSE 19132
 
-RUN mkdir /etc/service/pocketmine
-ADD pocketmine.sh /etc/service/pocketmine/run
-
-EXPOSE 19132/tcp 19132/udp
-
-VOLUME ["/pocketmine"]
-
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+CMD ["./start.sh", "--no-wizard", "--enable-rcon=on"]
 
